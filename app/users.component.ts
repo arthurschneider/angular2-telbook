@@ -9,7 +9,7 @@ import { UserService }  from './user.service';
   template: `
               <h1>{{title}}</h1>
               <h2>Meine Kontakte</h2>
-              <ul class="users">
+              <ul class="users" >
                 <li *ngFor="let user of users"
                           [class.selected]="user === selectedUser"
                           (click)="onSelect(user)"
@@ -73,8 +73,10 @@ import { UserService }  from './user.service';
 
 export class UsersComponent implements OnInit {
   selectedUser: User;
+  errorMessage: string = '';
+  isLoading: boolean = true;
 
-  users: User[];
+  users: User[]= [];
 
   constructor(private userService: UserService) { }
 
@@ -83,7 +85,11 @@ export class UsersComponent implements OnInit {
   }
 
   getUsers(): void {
-    this.userService.getUsers().then(users => this.users = users);
+    this.userService
+        .getUsers()
+        .subscribe(u => this.users = u,
+                   e => this.errorMessage = e,
+                   ()=> this.isLoading = false);
   }
 
   onSelect(user: User): void {

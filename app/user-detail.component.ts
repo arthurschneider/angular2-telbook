@@ -7,7 +7,7 @@ import { Telephone }  from './telephone';
 @Component({
   selector: 'my-user-detail',
   template: `
-              <div *ngIf="telephones">
+              <div *ngIf="telephones && telephones.length > 0">
                 <h2>Telefonnummern der Person</h2>
                 <ul class="users">
                   <li *ngFor="let tel of telephones">

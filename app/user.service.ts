@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { Injectable }               from '@angular/core';
+import { Http, Response, Headers }  from '@angular/http';
+import { Observable }               from 'rxjs/Rx';
 
-import { User } from './user';
-import { USERS } from './mock-users';
+import { User }       from './user';
+import { Telephone }  from './telephone';
+import { USERS }      from './mock-users';
 
 @Injectable()
 export class UserService {
   private baseUrl: string = 'http://localhost:8080';
 
-  constructor( private http: Http){
-
-  }
+  constructor( private http: Http){}
 
   getUsers(): Observable<User[]>{
     let users = this.http
@@ -22,6 +21,16 @@ export class UserService {
     return users;
   }
 
+  getPhoneForUserID(id: number): Observable<Telephone[]>{
+    let telephones = this.http
+      .get('http://localhost\:8080/telephone/user/' + id)
+      .map(mapTelephones)
+      .catch(handleError);
+
+    return telephones;
+  }
+
+
   private getHeaders(){
     let headers = new Headers();
     headers.append('Accept', 'application/json');
@@ -31,6 +40,21 @@ export class UserService {
 }
   function mapUsers(response: Response): User[]{
     return response.json().map(toUser)
+  }
+
+  function mapTelephones(response: Response): Telephone[]{
+    console.log("Map Telephones!");
+    return response.json().map(toTelephone)
+  }
+
+  function toTelephone(r: any): Telephone{
+    let telephone = <Telephone>({
+      id: r.id,
+      tel_number: r.tel_number,
+      relation: r.relation,
+    });
+    console.log('Parsed telephone:', telephone);
+    return telephone;
   }
 
   function toUser(r: any): User{

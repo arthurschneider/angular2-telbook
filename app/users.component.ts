@@ -2,6 +2,7 @@ import { Component }  from '@angular/core';
 import { OnInit }     from '@angular/core';
 
 import { User }         from './user';
+import { Telephone }    from './telephone';
 import { UserService }  from './user.service';
 
 @Component({
@@ -17,7 +18,7 @@ import { UserService }  from './user.service';
                   <span class="badge">{{user.id}}</span> {{user.lastname}}
                 </li>
               </ul>
-              <my-user-detail [user]="selectedUser"></my-user-detail>
+              <my-user-detail [telephones]="telephones"></my-user-detail>
            `,
   styles: [`
   .selected {
@@ -77,6 +78,7 @@ export class UsersComponent implements OnInit {
   isLoading: boolean = true;
 
   users: User[]= [];
+  telephones: Telephone[]= [];
 
   constructor(private userService: UserService) { }
 
@@ -93,6 +95,10 @@ export class UsersComponent implements OnInit {
   }
 
   onSelect(user: User): void {
-    this.selectedUser = user;
+    //this.selectedUser = user;
+    this.userService.getPhoneForUserID(user.id)
+        .subscribe(t => this.telephones = t,
+                   e => this.errorMessage = e,
+                   ()=> this.isLoading = false);
   }
 }

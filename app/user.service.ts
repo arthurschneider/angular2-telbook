@@ -4,7 +4,6 @@ import { Observable }               from 'rxjs/Rx';
 
 import { User }       from './user';
 import { Telephone }  from './telephone';
-import { USERS }      from './mock-users';
 
 @Injectable()
 export class UserService {

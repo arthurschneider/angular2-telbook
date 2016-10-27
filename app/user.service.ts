@@ -29,6 +29,14 @@ export class UserService {
     return telephones;
   }
 
+  searchFor(search_str: string): Observable<Telephone[]>{
+    let telephones = this.http
+      .get('http://localhost\:8080/user/search/telnumber/' + search_str)
+      .map(mapTelephones)
+      .catch(handleError);
+
+    return telephones;
+  }
 
   private getHeaders(){
     let headers = new Headers();
